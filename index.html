@@ -272,6 +272,31 @@
     margin-bottom: 0;
   }
 
+  /* Luxusnejší obal pre Google Form */
+  .form-wrapper {
+    max-width: 720px;
+    margin: 0 auto 8px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    background: #e9edf7;
+  }
+
+  .form-header {
+    background: #ffffff;
+    padding: 12px 18px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
+    border-bottom: 1px solid #dde3f0;
+  }
+
+  .form-wrapper iframe {
+    width: 100%;
+    border: 0;
+    height: 680px;
+  }
+
   /* HEADER LAYOUT */
   .header-row {
     display: flex;
@@ -329,6 +354,15 @@
 
     .swipe-hint {
       display: none;
+    }
+
+    .form-wrapper {
+      max-width: 100%;
+      border-radius: 12px;
+    }
+
+    .form-wrapper iframe {
+      height: 740px;
     }
   }
 </style>
@@ -470,7 +504,7 @@
       </div>
       <div class="card">
         <h3>❌ Nepoistená preprava</h3>
-        <p class="muted">Tovar medzi skladmi alebo k odberateľom sa berie ako „nejako krytý“. Bez cargo poistenia ide riziko na podnikateľa.</p>
+        <p class="muted">Tovar medzi sklami alebo k odberateľom sa berie ako „nejako krytý“. Bez cargo poistenia ide riziko na podnikateľa.</p>
       </div>
       <div class="card">
         <h3>❌ Slabé zabezpečenie</h3>
@@ -576,6 +610,7 @@
     </div>
   </section>
 
+  <!-- SEKCIa DOPYT – luxusný obal okolo Google Form -->
   <section id="dopyt">
     <h2>Bezplatný audit poistenia zásob</h2>
     <p class="muted" style="text-align:center; max-width:720px; margin:0 auto 24px;">
@@ -594,11 +629,19 @@
       <p class="muted" style="font-size:0.9rem; margin-top:10px;">Audit je bezplatný a slúži ako podklad pre Vaše rozhodnutie – nie ste povinný/á uzavrieť žiadny produkt.</p>
     </div>
 
-    <!-- Google Forms iframe -->
-    <iframe src="https://forms.gle/RLyDG2wqzwpgfvC26"
-            width="100%" height="900" frameborder="0" marginheight="0" marginwidth="0">
-      Načítavam formulár…
-    </iframe>
+    <!-- Google Forms v luxusnej karte -->
+    <div class="form-wrapper">
+      <div class="form-header">
+        Online formulár – nezáväzný dopyt na audit poistenia skladu a zásob
+      </div>
+      <iframe src="https://forms.gle/RLyDG2wqzwpgfvC26"
+              frameborder="0" marginheight="0" marginwidth="0">
+        Načítavam formulár…
+      </iframe>
+    </div>
+    <p class="muted" style="text-align:center; font-size:0.8rem; margin-top:8px;">
+      Formulár je zabezpečený prostredníctvom služby Google Forms. Po odoslaní Vám môže byť zaslané potvrdenie na e-mail podľa nastavenia formulára.
+    </p>
   </section>
 
   <section>
@@ -693,4 +736,3 @@
   </script>
 </body>
 </html>
-
