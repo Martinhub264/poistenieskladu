@@ -272,31 +272,6 @@
     margin-bottom: 0;
   }
 
-  /* Luxusnejší obal pre Google Form */
-  .form-wrapper {
-    max-width: 720px;
-    margin: 0 auto 8px;
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    background: #e9edf7;
-  }
-
-  .form-header {
-    background: #ffffff;
-    padding: 12px 18px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--text);
-    border-bottom: 1px solid #dde3f0;
-  }
-
-  .form-wrapper iframe {
-    width: 100%;
-    border: 0;
-    height: 680px;
-  }
-
   /* HEADER LAYOUT */
   .header-row {
     display: flex;
@@ -355,15 +330,41 @@
     .swipe-hint {
       display: none;
     }
+  }
 
-    .form-wrapper {
-      max-width: 100%;
-      border-radius: 12px;
+  /* Pulzujúce tlačidlo audit */
+  @keyframes pulseButton {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(0,184,217,0.5);
     }
+    60% {
+      transform: scale(1.05);
+      box-shadow: 0 0 0 16px rgba(0,184,217,0);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(0,184,217,0);
+    }
+  }
 
-    .form-wrapper iframe {
-      height: 740px;
-    }
+  .audit-cta {
+    display: inline-block;
+    padding: 18px 42px;
+    border-radius: 999px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    animation: pulseButton 2.2s ease-out infinite;
+    box-shadow: 0 12px 26px rgba(0,0,0,0.28);
+    letter-spacing: 0.02em;
+  }
+
+  .audit-cta:hover {
+    transform: scale(1.07);
+    box-shadow: 0 16px 32px rgba(0,0,0,0.32);
   }
 </style>
 </head>
@@ -610,14 +611,14 @@
     </div>
   </section>
 
-  <!-- SEKCIa DOPYT – luxusný obal okolo Google Form -->
+  <!-- SEKCIa DOPYT – pulzujúce tlačidlo otvára Google Form v novom okne -->
   <section id="dopyt">
     <h2>Bezplatný audit poistenia zásob</h2>
     <p class="muted" style="text-align:center; max-width:720px; margin:0 auto 24px;">
-      Vyplňte základné údaje o sklade a zásobách a pripravíme pre Vás bezplatný prehľad hlavných rizík a možností nastavenia poistenia skladu a zásob. Bez záväzku uzavrieť poistenie.
+      Vyplňte krátky online dotazník a pripravíme pre Vás bezplatný prehľad hlavných rizík a možností nastavenia poistenia skladu a zásob. Bez záväzku uzavrieť poistenie.
     </p>
 
-    <div class="card" style="max-width:720px; margin:0 auto 26px; text-align:left;">
+    <div class="card" style="max-width:720px; margin:0 auto 24px; text-align:left;">
       <h3 style="margin-top:0; color:var(--primary); text-align:center;">Čo pri audite riešime</h3>
       <ul class="checklist" style="text-align:center; list-style-position: inside; padding-left:0;">
         <li>správne nastavenú poistnú sumu zásob (vrátane sezónnych špičiek),</li>
@@ -629,19 +630,16 @@
       <p class="muted" style="font-size:0.9rem; margin-top:10px;">Audit je bezplatný a slúži ako podklad pre Vaše rozhodnutie – nie ste povinný/á uzavrieť žiadny produkt.</p>
     </div>
 
-    <!-- Google Forms v luxusnej karte -->
-    <div class="form-wrapper">
-      <div class="form-header">
-        Online formulár – nezáväzný dopyt na audit poistenia skladu a zásob
-      </div>
-      <iframe src="https://forms.gle/RLyDG2wqzwpgfvC26"
-              frameborder="0" marginheight="0" marginwidth="0">
-        Načítavam formulár…
-      </iframe>
+    <div style="text-align:center; margin-top:6px;">
+      <a class="audit-cta"
+         href="https://forms.gle/RLyDG2wqzwpgfvC26"
+         target="_blank" rel="noopener noreferrer">
+        Bezplatný audit / Poistenie zásob
+      </a>
+      <p class="muted" style="font-size:0.85rem; margin-top:10px;">
+        Tlačidlo otvorí bezpečný formulár Google Forms v novom okne. Vyplnenie trvá približne 3–5&nbsp;minút.
+      </p>
     </div>
-    <p class="muted" style="text-align:center; font-size:0.8rem; margin-top:8px;">
-      Formulár je zabezpečený prostredníctvom služby Google Forms. Po odoslaní Vám môže byť zaslané potvrdenie na e-mail podľa nastavenia formulára.
-    </p>
   </section>
 
   <section>
