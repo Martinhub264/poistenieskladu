@@ -1,1 +1,696 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Poistenie skladu a zásob</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary:#0052cc;
+    --secondary:#00b8d9;
+    --accent:#36b37e;
+    --text:#1b263b;
+    --muted:#5c6f82;
+    --bg:#f9fafb;
+    --card-bg:#ffffff;
+    --shadow:0 6px 18px rgba(0,0,0,0.1);
+    --radius:14px;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #ffffff;
+    color: var(--text);
+    margin: 0;
+  }
+
+  header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: #fff;
+    text-align: center;
+    padding: 40px 20px 30px;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+
+  h1 {
+    font-size: 2.6rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+
+  .sub {
+    font-size: 1.3rem;
+    color: #e0e0e0;
+    margin-bottom: 26px;
+    font-weight: 700;
+  }
+
+  .cta {
+    background: var(--accent);
+    color: #fff;
+    padding: 14px 32px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+    transition: all 0.25s ease;
+    display: inline-block;
+  }
+
+  .cta:hover {
+    background: #2e9b6d;
+    transform: translateY(-2px);
+  }
+
+  .hook-bar {
+    margin-top: 26px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    background: rgba(0,0,0,0.18);
+    border-radius: 999px;
+    font-size: 0.95rem;
+    color: #f3f4f6;
+  }
+
+  .hook-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 26px 20px;
+  }
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 25px;
+    color: var(--primary);
+    text-align: center;
+    font-weight: 700;
+  }
+
+  p {
+    line-height: 1.6;
+  }
+
+  .muted {
+    color: var(--muted);
+  }
+
+  .swipe-hint {
+    display: none;
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 6px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+    justify-items: center;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: 6px -6px 16px rgba(0,0,0,0.08);
+    padding: 25px;
+    position: relative;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 10px -10px 26px rgba(0,0,0,0.14);
+  }
+
+  .card h3 {
+    color: var(--primary);
+    margin-top: 0;
+  }
+
+  ul.checklist {
+    padding-left: 18px;
+  }
+
+  ul.checklist li::marker {
+    color: var(--accent);
+  }
+
+  form {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 22px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  label {
+    font-weight: 600;
+    display: block;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    margin-top: 4px;
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    border: 1px solid #ccd2d8;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+  }
+
+  .btn {
+    background: var(--primary);
+    color: #fff;
+    padding: 10px 22px;
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 100%;
+  }
+
+  .btn:hover {
+    background: #003c99;
+  }
+
+  footer {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: #fff;
+    text-align: center;
+    padding: 30px 10px;
+  }
+
+  .shield-pulse {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pulseShield 3s ease-in-out infinite;
+  }
+
+  @keyframes pulseShield {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.15); }
+    70% { transform: scale(1); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes tickerMove {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+
+  .card-mini {
+    padding: 18px 18px;
+    box-shadow: 4px -4px 12px rgba(0,0,0,0.06);
+  }
+
+  .card-mini h3 {
+    font-size: 1rem;
+    margin-bottom: 6px;
+  }
+
+  .card-mini p {
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+  }
+
+  .card-mini .mini-cta {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: underline;
+  }
+
+  .faq-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    font-weight: 600;
+    list-style: none;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary::after {
+    content: "+";
+    float: right;
+    font-weight: 600;
+    color: var(--primary);
+  }
+
+  .faq-item[open] summary::after {
+    content: "−";
+  }
+
+  .faq-item p {
+    margin-top: 8px;
+    margin-bottom: 0;
+  }
+
+  /* HEADER LAYOUT */
+  .header-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+  }
+
+  @media (min-width: 769px) {
+    .header-row {
+      flex-direction: column;
+    }
+  }
+
+  /* DESKTOP / VÄČŠIE DISPLEJE */
+  @media (min-width: 769px) {
+    header {
+      padding: 40px 20px 40px;
+    }
+  }
+
+  /* MOBIL – štandardný stacked layout */
+  @media (max-width: 768px) {
+    header {
+      padding: 40px 16px 28px;
+      min-height: auto;
+      display: block;
+    }
+
+    .header-row {
+      gap: 16px;
+    }
+
+    .sub,
+    .cta,
+    .hook-bar {
+      display: block;
+    }
+
+    section {
+      padding: 24px 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .card,
+    .card-mini {
+      max-width: 100%;
+    }
+
+    .swipe-hint {
+      display: none;
+    }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <!-- Horné tlačidlo KONTAKT -->
+    <div style="position:absolute; top:14px; right:18px; z-index:20;">
+      <a href="https://wa.me/421905874100" target="_blank"
+         style="background:#fff; color:var(--primary); padding:8px 16px; border-radius:999px;
+                font-weight:700; text-decoration:none; box-shadow:0 3px 8px rgba(0,0,0,0.25);
+                font-size:0.9rem;">
+        KONTAKT • +421&nbsp;905&nbsp;874&nbsp;100
+      </a>
+    </div>
+
+    <div class="header-row">
+      <div class="logo" style="display:flex;align-items:center; margin-top:0px;">
+        <svg width="130" height="100" viewBox="0 0 58 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 20 L29 4 L54 20" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/>
+          <line x1="4" y1="42" x2="54" y2="42" stroke="#FFFFFF" stroke-width="3"/>
+          <defs>
+            <filter id="shieldShadow" x="-40%" y="-40%" width="180%" height="180%">
+              <feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.32"/>
+            </filter>
+          </defs>
+          <path class="shield-pulse" d="M29 16 L37 20 V26 C37 31 33 35 29 37 C25 35 21 31 21 26 V20 L29 16 Z"
+                fill="#36B37E" stroke="#FFFFFF" stroke-width="1.8" stroke-linejoin="round" filter="url(#shieldShadow)"/>
+        </svg>
+      </div>
+
+      <h1 style="margin:0; padding:0;">Poistenie skladu a zásob</h1>
+
+      <p class="sub">
+        <strong>Seriózne riešenie pre moderné firmy, e-shopy a logistické priestory.</strong><br>
+        <strong>Najväčšie riziko? Myslieť si, že sa Vám to nestane.</strong>
+      </p>
+
+      <a href="#dopyt" class="cta">Získať ponuku</a>
+
+      <div class="hook-bar">
+        <span class="hook-dot"></span>
+        <span id="hook-text">Na Slovensku funguje vyše 12 000 e-shopov. Väčšina nemá poistené zásoby.</span>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <h2>Najčastejšie riziká</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>🔥 Požiar</h3>
+        <p>Škody z elektrického skratu, preťaženia zásuviek alebo chybného zariadenia. Pri väčšom sklade môže ísť o stovky tisíc eur.</p>
+      </div>
+      <div class="card">
+        <h3>💧 Zatopenie</h3>
+        <p>Prasknuté potrubie, zatekanie zo strechy, prívalové dažde. Voda zničí kartóny, textil, elektroniku aj regály.</p>
+      </div>
+      <div class="card">
+        <h3>🚚 Krádež</h3>
+        <p>Vlámanie do skladu alebo prenajatej haly, odcudzenie zásob s prekonaním zabezpečenia.</p>
+      </div>
+      <div class="card">
+        <h3>⚡ Výpadok prevádzky</h3>
+        <p>Požiar či voda zastavia predaj aj logistiku. Bez krytia prerušenia prevádzky (BI) ide celá škoda na podnikateľa.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Prečo je sklad najzraniteľnejší majetok firmy?</h2>
+    <p class="muted">Sklady a zásoby patria na Slovensku medzi najmenej poistený typ majetku. Pritom ide často o najväčšiu položku v účtovníctve – tovar, materiál, rozpracovaná výroba.</p>
+    <div class="grid">
+      <div class="card">
+        <h3>📦 Najväčšia hodnota „na jednom mieste“</h3>
+        <p>Zásoby sú často koncentrované v jedinom sklade. Jedna udalosť (požiar, povodeň, krádež) môže znamenať koniec podnikania.</p>
+      </div>
+      <div class="card">
+        <h3>📉 Podpoistenie o 40–60&nbsp;%</h3>
+        <p>Bežný problém – poistná suma sa nemení roky, zásoby rastú. Pri škode poisťovňa kráti plnenie percentuálne.</p>
+      </div>
+      <div class="card">
+        <h3>🚫 Nesprávne určená hodnota</h3>
+        <p>Rozdiel medzi obstarávacou a predajnou hodnotou, sezónne špičky, tovar u tretích osôb – ak to nie je dojednané, vzniká medzera v krytí.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Príklady škôd z praxe (SR / ČR)</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Požiar skladu textilu – škoda 350 000&nbsp;€</h3>
+        <p class="muted">Sklad malého e-shopu s textilom. Elektrický skrat v nabíjačke zapálil regál. Zásoby za ~290&nbsp;000&nbsp;€, poškodená technika a budova. Poistná suma bola nastavená len na 150&nbsp;000&nbsp;€ – plnenie sa krátilo, zvyšok hradila firma z vlastného.</p>
+      </div>
+      <div class="card">
+        <h3>Krádež elektroniky zo skladu – škoda 90 000&nbsp;€</h3>
+        <p class="muted">Prenajatá hala s elektronikou. Vlámanie v noci, zmizli notebooky a mobilné telefóny. Zabezpečenie nespĺňalo podmienky poisťovne, poistná suma bola nízka. Reálne plnenie ~15&nbsp;000&nbsp;€ – zvyšok strata podnikateľa.</p>
+      </div>
+      <div class="card">
+        <h3>Zatopený sklad po búrke – škoda 45 000&nbsp;€</h3>
+        <p class="muted">Prívalový dážď zatopil nakladaciu rampu, voda prenikla do skladu. Zničený textil a obaly. Vďaka dobre nastavenému krytiu živlov boli škody uhradené v plnej výške a e-shop pokračoval v predaji po pár dňoch.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Čo poistenie zahŕňa</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>✅ Zásoby</h3>
+        <p>Vlastné aj cudzie zásoby vo všetkých typoch skladov – vlastný, prenajatý, self-storage, fulfillment.</p>
+      </div>
+      <div class="card">
+        <h3>✅ Preprava</h3>
+        <p>Ochrana tovaru pri presunoch medzi prevádzkami. Externú prepravu riešime samostatným cargo poistením.</p>
+      </div>
+      <div class="card">
+        <h3>✅ Vandalizmus a krádež</h3>
+        <p>Poškodenie majetku tretími osobami a krádež vlámaním pri splnených požiadavkách na zabezpečenie objektu.</p>
+      </div>
+      <div class="card">
+        <h3>✅ Prerušenie prevádzky (BI)</h3>
+        <p>Krytie straty zisku a fixných nákladov počas výpadku alebo opráv po poistnej udalosti.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Najčastejšie chyby pri poistení skladov</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>❌ Poistené len regály, nie zásoby</h3>
+        <p class="muted">Majetok je poistený na budovu a zariadenie, ale nie na samotný tovar. Pri požiaroch a krádežiach potom chýba krytie hlavnej položky.</p>
+      </div>
+      <div class="card">
+        <h3>❌ Ignorovanie sezónnych špičiek</h3>
+        <p class="muted">Počas sezóny sú zásoby 2–3× vyššie, ako je nastavená poistná suma. Poisťovňa potom kráti plnenie podľa podpoistenia.</p>
+      </div>
+      <div class="card">
+        <h3>❌ Nepoistená preprava</h3>
+        <p class="muted">Tovar medzi skladmi alebo k odberateľom sa berie ako „nejako krytý“. Bez cargo poistenia ide riziko na podnikateľa.</p>
+      </div>
+      <div class="card">
+        <h3>❌ Slabé zabezpečenie</h3>
+        <p class="muted">Zámky, mriežky, alarm, PCO – ak nespĺňajú podmienky, pri krádeži môže byť plnenie zamietnuté alebo výrazne krátené.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Pre koho je toto poistenie ideálne?</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>🛒 E-shopy a online predaj</h3>
+        <p class="muted">Sklady s tovarom na paletách, regáloch alebo v boxoch – od oblečenia až po elektroniku.</p>
+      </div>
+      <div class="card">
+        <h3>🏭 Výroba a montáž</h3>
+        <p class="muted">Výrobný materiál, polotovary, rozpracovaná výroba a hotové výrobky.</p>
+      </div>
+      <div class="card">
+        <h3>📦 Logistika, 3PL a fulfillment</h3>
+        <p class="muted">Prevádzky, kde sú zásoby klientov, zodpovednosť za uskladnený tovar a tok zásob.</p>
+      </div>
+      <div class="card">
+        <h3>🧊 Špeciálne sklady</h3>
+        <p class="muted">Chladené sklady, skladovanie potravín, kozmetiky či citlivého tovaru.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WhatsApp / kontakt karta -->
+  <section>
+    <div class="card" style="max-width:520px; margin:0 auto 30px;
+         background:linear-gradient(135deg, var(--primary), var(--secondary));
+         color:#fff; text-align:left; display:flex; align-items:center; gap:18px;
+         padding:22px 26px; border-radius:var(--radius); box-shadow:var(--shadow);">
+      <div style="width:48px; height:48px; border-radius:50%;
+           border:2px solid rgba(255,255,255,0.8); display:flex; align-items:center;
+           justify-content:center; flex-shrink:0;">
+        <!-- Ikona telefónu / volania -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.62 10.79C7.06 11.84 7.78 12.78 8.76 13.54C9.64 14.22 10.66 14.68 11.75 14.9L13.03 13.62C13.19 13.46 13.42 13.4 13.63 13.47L17.5 14.75C17.74 14.83 17.91 15.05 17.94 15.3C18.02 16.07 17.8 16.86 17.31 17.5C16.74 18.21 15.9 18.63 14.99 18.63C13.11 18.63 10.47 17.79 8.02 15.34C5.21 12.53 4.63 9.88 4.63 8.01C4.63 7.1 5.05 6.26 5.76 5.69C6.4 5.2 7.19 4.98 7.96 5.06C8.21 5.09 8.43 5.26 8.51 5.5L9.79 9.37C9.86 9.58 9.8 9.81 9.64 9.97L8.36 11.25C8.43 11.47 8.53 11.68 8.64 11.89L6.62 10.79Z"
+                fill="#FFFFFF"/>
+        </svg>
+      </div>
+      <div>
+        <div style="font-size:1.05rem; font-weight:700; margin-bottom:4px;">
+          Ing. Martin Hubáček – ochrana skladov a zásob
+        </div>
+        <div style="font-size:0.9rem; margin:4px 0 8px; font-weight:500;">
+          Keď ide o sklad, druhú šancu nedostanete.
+        </div>
+        <a href="https://wa.me/421905874100" target="_blank"
+           style="color:#fff; font-weight:700; text-decoration:underline; font-size:0.95rem;">
+          ☎ WhatsApp: +421 905 874 100
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Doplnková sekcia: Podnikatelia vyhľadávajú aj krytie -->
+  <section>
+    <h2 style="font-size:1.9rem; text-align:center; color:var(--primary); font-weight:700; margin-bottom:10px;">Podnikatelia často potrebujú aj toto krytie</h2>
+    <p class="muted" style="text-align:center; margin-bottom:30px;">Komplexné riešenia pre firmy – doplnkové poistenia, ktoré chránia majetok, prevádzku a zodpovednosť.</p>
+
+    <div class="grid">
+      <a href="https://www.najpoistenie.sk/havarijne-poistenie/?kod=168640003" class="card card-mini" style="text-decoration:none; color:inherit;" target="_blank" rel="noopener noreferrer">
+        <h3>🚗 KASKO – havarijné poistenie</h3>
+        <p class="muted">Ochrana firemných vozidiel pri nehode, poškodení aj krádeži.</p>
+        <span class="mini-cta">Zobraziť ponuku</span>
+      </a>
+
+      <a href="https://www.najpoistenie.sk/pzp-povinne-zmluvne-poistenie/?kod=168640003" class="card card-mini" style="text-decoration:none; color:inherit;" target="_blank" rel="noopener noreferrer">
+        <h3>🛡️ PZP – povinné zmluvné poistenie</h3>
+        <p class="muted">Základná povinnosť každého vozidla, vhodné aj pre logistiku a fleet.</p>
+        <span class="mini-cta">Zobraziť ponuku</span>
+      </a>
+
+      <a href="https://www.najpoistenie.sk/poistenie-domu-bytu-domacnosti/?kod=168640003" class="card card-mini" style="text-decoration:none; color:inherit;" target="_blank" rel="noopener noreferrer">
+        <h3>🏢 Majetok – nehnuteľnosti</h3>
+        <p class="muted">Poistenie budov, skladov, prevádzok a firemného vybavenia.</p>
+        <span class="mini-cta">Zobraziť ponuku</span>
+      </a>
+
+      <a href="https://www.najpoistenie.sk/poistenie-zodpovednosti-zamestnanca-za-skodu/?kod=168640003" class="card card-mini" style="text-decoration:none; color:inherit;" target="_blank" rel="noopener noreferrer">
+        <h3>👤 Zodpovednosť zamestnanca</h3>
+        <p class="muted">Krytie škôd spôsobených pracovníkom pri výkone práce.</p>
+        <span class="mini-cta">Zobraziť ponuku</span>
+      </a>
+
+      <a href="https://www.najpoistenie.sk/gap-poistenie-financnej-straty/?kod=168640003" class="card card-mini" style="text-decoration:none; color:inherit;" target="_blank" rel="noopener noreferrer">
+        <h3>📉 GAP – finančná strata</h3>
+        <p class="muted">Dôležité pre financované vozidlá a stroje, dopĺňa havarijné poistenie.</p>
+        <span class="mini-cta">Zobraziť ponuku</span>
+      </a>
+
+      <a href="https://www.najpoistenie.sk/poistenie-podnikatelov/?kod=168640003" class="card card-mini" style="text-decoration:none; color:inherit;" target="_blank" rel="noopener noreferrer">
+        <h3>🏭 Poistenie podnikateľov</h3>
+        <p class="muted">Komplexné krytie pre malé a stredné firmy – od majetku po zodpovednosť.</p>
+        <span class="mini-cta">Zobraziť ponuku</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="dopyt">
+    <h2>Bezplatný audit poistenia zásob</h2>
+    <p class="muted" style="text-align:center; max-width:720px; margin:0 auto 24px;">
+      Vyplňte základné údaje o sklade a zásobách a pripravíme pre Vás bezplatný prehľad hlavných rizík a možností nastavenia poistenia skladu a zásob. Bez záväzku uzavrieť poistenie.
+    </p>
+
+    <div class="card" style="max-width:720px; margin:0 auto 26px; text-align:left;">
+      <h3 style="margin-top:0; color:var(--primary); text-align:center;">Čo pri audite riešime</h3>
+      <ul class="checklist" style="text-align:center; list-style-position: inside; padding-left:0;">
+        <li>správne nastavenú poistnú sumu zásob (vrátane sezónnych špičiek),</li>
+        <li>podmienky zabezpečenia skladu z pohľadu poisťovne,</li>
+        <li>krytie krádeže, vody, požiaru a prerušenia prevádzky,</li>
+        <li>zásoby u tretích strán (3PL, fulfillment, externé sklady),</li>
+        <li>skúsenosti s poistnými udalosťami a výlukami v zmluve.</li>
+      </ul>
+      <p class="muted" style="font-size:0.9rem; margin-top:10px;">Audit je bezplatný a slúži ako podklad pre Vaše rozhodnutie – nie ste povinný/á uzavrieť žiadny produkt.</p>
+    </div>
+
+    <!-- Google Forms iframe -->
+    <iframe src="https://forms.gle/RLyDG2wqzwpgfvC26"
+            width="100%" height="900" frameborder="0" marginheight="0" marginwidth="0">
+      Načítavam formulár…
+    </iframe>
+  </section>
+
+  <section>
+    <h2>Najčastejšie otázky (FAQ)</h2>
+    <div class="card" style="max-width:900px; margin:0 auto; text-align:left;">
+      <details class="faq-item" open>
+        <summary>Je poistenie zásob a skladov povinné?</summary>
+        <p class="muted">Zákon priamo neprikazuje poistiť zásoby, no pri financovaní, leasingu alebo zmluvných vzťahoch (napr. s odberateľmi) býva poistenie majetku často podmienkou. V praxi ide o kľúčový prvok riadenia rizík firmy.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Čo je podpoistenie a ako ovplyvní plnenie?</summary>
+        <p class="muted">Pri podpoistení je poistná suma nižšia ako skutočná hodnota zásob. Pri škode poisťovňa môže krátiť plnenie v rovnakom pomere – aj pri menšej škode. Preto je dôležité pracovať so sezónnymi špičkami a reálnou hodnotou zásob.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Sú kryté aj zásoby v prenajatom alebo externom sklade?</summary>
+        <p class="muted">Vo väčšine prípadov je možné poistiť zásoby aj v prenajatých priestoroch či u externého partnera (3PL, fulfillment). Dôležité je, aby boli tieto miesta a vzťahy správne uvedené v zmluve.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Je poistená aj krádež bez zjavného poškodenia (interné škody, manká)?</summary>
+        <p class="muted">Štandardné poistenie majetku kryje najmä krádež vlámaním a lúpež. Interné škody, manká či úmyselné konanie pracovníkov bývajú vo všeobecnosti vylúčené alebo riešené samostatnými produktmi.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Dá sa poistiť aj prerušenie prevádzky po škode na sklade?</summary>
+        <p class="muted">Áno, ide o poistenie prerušenia prevádzky (Business Interruption). Kryje napríklad stratu zisku a fixné náklady počas obdobia obnovy po poistnej udalosti, ak je dojednané v zmluve.</p>
+      </details>
+    </div>
+  </section>
+
+  <section>
+    <div class="card" style="max-width:900px; margin:0 auto -10px; text-align:left;">
+      <h3 style="margin-top:0; color:var(--primary); text-align:center;"><strong>Ako pracujeme a čo garantujeme</strong></h3>
+      <ul class="checklist" style="text-align:center; list-style-position: inside; padding-left:0;">
+        <li><strong>Vysvetlíme rozdiely medzi jednotlivými poisteniami a výlukami</strong> tak, aby im rozumel aj majiteľ firmy, nie len poisťovňa.</li>
+        <li><strong>Neponúkame "najlacnejšiu poistku"</strong>, ale riešenie, ktoré dáva zmysel z hľadiska rizík a cash-flow firmy.</li>
+        <li><strong>Ak už poistenie máte, upozorníme na slabé miesta</strong> (podpoistenie, výluky, chýbajúce krytia).</li>
+        <li><strong>Komunikujeme za Vás s poisťovňami a obchodníkmi</strong> – vy sa venujete podnikaniu.</li>
+      </ul>
+      <p class="muted" style="font-size:0.9rem; margin-top:10px;">Cieľ je jednoduchý: aby v prípade škody poisťovňa plnila podľa očakávania a nie podľa drobných písmen v zmluve.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="ticker" style="max-width:1100px; margin:0 auto 20px; overflow:hidden; border-top:1px solid rgba(255,255,255,0.2); border-bottom:1px solid rgba(255,255,255,0.2); padding:10px 0;">
+      <div class="ticker-inner" style="display:inline-block; white-space:nowrap; animation:tickerMove 22s linear infinite; color:#e0edff; font-size:0.9rem;">
+        Spolupracujeme so sprostredkovateľskou sieťou Finportal, a.s. – prístup k ponukám viacerých poisťovní: Allianz • Uniqa • Generali • Colonnade • Union • Kooperativa • a ďalšie.
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 PoistenieSkladu.sk • M&F Consulting • Všetky práva vyhradené
+    <div style="font-size:0.85rem; line-height:1.5; color:#d0d6e0; max-width:1100px; margin:40px auto; padding:20px;">
+      <div style="margin-bottom:20px; display:flex; justify-content:center;">
+        <svg width="90" height="70" viewBox="0 0 58 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 20 L29 4 L54 20" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/>
+          <line x1="4" y1="42" x2="54" y2="42" stroke="#FFFFFF" stroke-width="3"/>
+          <path d="M29 16 L37 20 V26 C37 31 33 35 29 37 C25 35 21 31 21 26 V20 L29 16 Z" fill="#36B37E" stroke="#FFFFFF" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h3 style="color:#fff; margin-top:0;">Informácia o sprostredkovaní</h3>
+      <p>Poskytujeme sprostredkovanie poistenia (PFA) na základe platnej registrácie v NBS, číslo registrácie 287587. Táto stránka má informatívny charakter – nejde o priamy predaj poistenia. Zobrazené informácie sú orientačné a výsledná ponuka vždy závisí od presných parametrov klienta a následnej konzultácie.</p>
+      <p>Pred odoslaním dopytu si, prosím, prečítajte Podmienky a Ochranu súkromia.</p>
+      <br>
+      <h3 style="color:#fff; margin-bottom:6px;">Právne informácie a prevádzkovateľ</h3>
+      <p>Táto webová stránka je v súkromnom vlastníctve prevádzkovateľa M&F Consulting s.r.o. a nie je webovou stránkou poisťovne. Obsah má informatívny charakter a nejde o záväznú ponuku poisťovateľa. Výsledné podmienky a cena vždy závisia od konkrétnych parametrov klienta a následnej konzultácie.</p>
+      <p>Odoslanie akýchkoľvek údajov je dobrovoľné a odoslaním udeľujete súhlas so spracúvaním v rozsahu potrebnom na prípravu nezáväznej ponuky a komunikáciu k dopytu. Nie ste povinný/á uzavrieť akýkoľvek produkt.</p>
+      <p>Prevádzkovateľ vykonáva finančné sprostredkovanie v pozícii podriadeného finančného agenta (PFA) podľa § 9 zákona č. 186/2009 Z. z., na základe zmluvy so samostatným finančným agentom Finportal, a.s. (NBS register: 287587).</p>
+      <p>GDPR / Ochrana súkromia: podrobnosti nájdete v našich dokumentoch: Ochrana súkromia • Podmienky používania.</p>
+      <p>Zodpovednosť a aktualizácie: hoci dbáme na presnosť informácií, môžu sa kedykoľvek zmeniť. Vyhradzujeme si právo na úpravu a zmenu informácií bez predchádzajúceho upozornenia. Za konečné podmienky sú rozhodujúce dokumenty poskytovateľov a zmluvná dokumentácia.</p>
+      <br>
+      <p>Kontakt: hubacekm26@gmail.com • +421 905 874 100</p>
+    </div>
+  </footer>
+
+  <script>
+    // Rotujúce hook tvrdenia
+    const hooks = [
+      "Na Slovensku funguje vyše 12 000 e-shopov. Väčšina nemá poistené zásoby.",
+      "Až 70 % skladov je podpoistených alebo úplne nepoistených.",
+      "Priemerná škoda pri požiari skladu presahuje 180 000 €.",
+      "Najčastejšie krádeže v skladoch sú medzi 22:00 a 02:00.",
+      "Každý 9. e-shop riešil v roku 2023 skladovú alebo logistickú škodu."
+    ];
+    let hookIndex = 0;
+    const hookEl = document.getElementById('hook-text');
+    if (hookEl) {
+      setInterval(() => {
+        hookIndex = (hookIndex + 1) % hooks.length;
+        hookEl.textContent = hooks[hookIndex];
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
 
